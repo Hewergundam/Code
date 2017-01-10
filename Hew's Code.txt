@@ -183,3 +183,63 @@ void loop()
 	delayMicroseconds(100);
 	
 }
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7735.h>
+#include <SPI.h>
+#define TFT_CS 10
+#define TFT_RST 9
+#define TFT_DC 9
+
+#define TFT_MOST 11
+#define TFT_SCLK 13
+
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.print("Link Start");
+ tft.initR(INITR_BLACKTAB);
+ Serial.println("Initialized");
+ uint16_t time = millis();
+ tft.fillScreen(ST7735_BLACK);
+ time = millis() - time;
+ 
+ tft.fillScreen(ST7735_WHITE);
+ testdrawtext("HELLO THERE, I HAVE BEEN EXPECTING YOU ", ST7735_BLACK);
+ tftPrintText();
+ delay(4000);
+ 
+ }
+ 
+void loop()
+{
+  tft.invertDisplay(true);
+  delay(500);
+  tft.invertDisplay(false);
+  delay(500);
+}
+void tftPrintText()
+{
+  tft.setTextWrap(true);
+  tft.fillScreen(ST7735_WHITE);
+  tft.setCursor(0, 30);
+  tft.setTextColor(ST7735_BLACK);
+  tft.setTextSize(1);
+  tft.println("WELCOME");
+  tft.setTextColor(ST7735_BLACK);
+  tft.setTextSize(2);
+  tft.println("TO");
+  tft.setTextColor(ST7735_RED);
+  tft.setTextSize(4);
+  tft.println("HELL");
+  delay(100);
+}
+ void testdrawtext(char *text, uint16_t color)
+ {
+     tft.setCursor(0, 0);
+  tft.setTextColor(color);
+  tft.setTextWrap(true);
+  tft.print(text);
+ }
