@@ -243,3 +243,15 @@ void tftPrintText()
   tft.setTextWrap(true);
   tft.print(text);
  }
+  celc1 = analogRead(A1);
+  celc2 = (celc1 * 500)/1024;
+  celc4 = (celc2 *1.8) + 32;
+  Serial.print("Analog Value: ");
+  Serial.println(celc1);
+  Serial.print("Temp Value: ");
+  Serial.print(celc2);
+  Serial.print("C");
+  Serial.print(", ");
+  Serial.print(celc4);
+  Serial.println("F");
+  delay(1000);
