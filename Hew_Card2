@@ -1,1 +1,89 @@
+#include <SoftwareSerial.h>                                                                                             
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+#include<SoftwareSerial.h>
+SoftwareSerial rSerial(2, 3);
+char code[16];
+int x;
+char Hew[13] = "7A0092B6BAE4";
+char Chr[13] = "7A005B0FF8D6";
+
+int He = 0;
+int Ch = 0;
+
+int checktag(char tag1[], char tag2[])
+{
+  for (x= 0; x < 12; x++)
+  {
+    if (tag1[x] != tag2[x]){
+      return 1;
+    }
+    else
+    {
+      return 2;
+    }
+  }
+}
+
+void setup()
+{
+  Serial.begin(9600);
+  rSerial.begin(9600);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(5, OUTPUT);
+  lcd.begin(20, 4);
+  lcd.backlight();
+}
+
+void loop()
+{
+  int a = 0;
+  int Read;
+
+  while(rSerial.available())
+  {
+    Read = rSerial.read();
+
+    if (Read != 2 && Read != 13 && Read!= 10 && Read!= 3)
+    {
+      code[a] = Read;
+      a++;
+    }  
+  }
+  He = checktag(code, Hew);
+  Ch = checktag(code, Chr);
+  if (He == 2)
+  {
+    lcd.setCursor(0,0);
+    lcd.print("Welcome, Master");
+    Serial.println(code);
+    delay(2000);
+    Ch = 0;
+    He = 0;
+  }
+  if (Ch == 2)
+  {
+    lcd.setCursor(0,0);
+    lcd.print("Hello Mr.Christy");
+    delay(2000);
+    Ch = 0;
+    He = 0;
+  }
+  else
+  {
+    lcd.clear();
+  }
+  for(int c = 0; c <= 13; c++)
+  {
+    code[c] = 0;
+  }
+}
+
+
+
+
+
 
