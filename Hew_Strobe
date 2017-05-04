@@ -25,3 +25,34 @@ void loop()
 //  digitalWrite(9, LOW);
 
 }
+
+#include "Wire.h"
+#include "Adafruit_LiquidCrystal.h"
+long x;
+
+Adafruit_LiquidCrystal lcd(0);
+void setup()
+{
+  pinMode(9, OUTPUT);
+  TCCR1A = (0 << COM1A1) | (1 << COM1A0); // sets 9 to toggle state
+  TCCR1B = (1 << CS12) | (0 << CS11) | (0 << CS10) | (1 << WGM12); //sets prescale by 256
+  OCR1A = 100;//sets compare match
+  lcd.begin(16, 2);
+}
+void loop()
+{
+  //  digitalWrite(9, HIGH);
+  //  delay(10);
+  x = analogRead(0);
+  map(x, 0, 1024, 62500, 61);
+  lcd.setCursor(0, 0);
+  x = min(x, 1204);
+  x = max(x, 0);
+  lcd.print(x);
+  // lcd.print(10000);
+  OCR1A = x;
+  x = 0;
+  delay(100);
+  //  digitalWrite(9, LOW);
+
+}
